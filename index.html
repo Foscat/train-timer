@@ -24,6 +24,7 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
   
+  
 </head>
 
 
@@ -51,7 +52,6 @@
             <!-- The catagories that the table will follow -->
             <thead class="thead-dark">
               <tr>
-                <th>#</th>
                 <th>Train Name</th>
                 <th>Destination</th>
                 <th>Frequency (minutes)</th>
@@ -59,8 +59,16 @@
                 <th>Minutes Away</th>
               </tr>
             </thead>
+           
 
             <tbody>
+                <tr>
+                    <td>name</td>
+                    <td>destination</td>
+                    <td>frequency</td>
+                    <td>next</td>
+                    <td>minaway</td>
+                  </tr>
               <!-- Info is generated in javascript -->
             </tbody>
 
@@ -97,12 +105,12 @@
 
             <div class="input-field col m-1">
               <input type="time" class="validate" id="firstTrainInput">
-              <label class='active' for="">First Train (HH:mm Military Time)</label>
+              <label class='active' for="">First Train</label>
             </div>
 
             <div class="input-field col m-1">
               <input type="number" class="validate" id="frequencyInput">
-              <label for="">Frequency (minutes)</label>
+              <label for="">Frequency (min)</label>
             </div>
 
             <button type="submit" class="btn btn-primary m-2" id="add-Train">Submit</button>
