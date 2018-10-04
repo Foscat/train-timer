@@ -15,15 +15,13 @@
 
 var database = firebase.database();
 
-
-
 // Setup global varibles
 var trainName = "";
 var destination = "";
 var firstTrain = "";
 var frequency = "";
-var nextArrival = "next time";
-var minAway = "min away";
+var nextArrival = "";
+var minAway = "";
 
   
 //When the submit button is pushed
@@ -60,17 +58,15 @@ $("#add-Train").on('click', function(event) {
 
   //Create a var that does the math between 
   //Subtract the first train time back a year to make sure it's before current time.
-  //var firstTrianConversion = moment(firstTrain, "HH:mm").subtract("1, years");
+  var firstTrianConversion = moment().subtract(firstTrain, "minutes");
 
-  //Differance in time between current time and first train
-  //var timeDiff = currentTime - firstTrianConversion;
 
   // % = Modulus (Remainder)
-  //var remainder = timeDiff % frequency;
+  var remainder = firstTrianConversion % frequency;
 
   //Time math to get minuites until the next train
-  //var minUntilTrain = frequency - remainder; 
- // var nextTrain = moment().add(minUntilTrain, "minutes").format("HH:mm Military Time");
+  var minUntilTrain = frequency - remainder; 
+  var nextTrain = moment().add(minUntilTrain, "minutes").format("LT");
 
   
   console.log(trainName);
@@ -78,11 +74,10 @@ $("#add-Train").on('click', function(event) {
   console.log(firstTrain);
   console.log(frequency);  
   console.log(currentTime);
-  // console.log(firstTrianConversion);
-  // console.log(timeDiff);
-  // console.log(remainder);
-  // console.log(minUntilTrain);
-  //console.log(nextTrain);
+  console.log(firstTrianConversion);
+  console.log(remainder);
+  console.log(minUntilTrain);
+  console.log(nextTrain);
 
 
 
@@ -92,8 +87,9 @@ $("#add-Train").on('click', function(event) {
     firstTrain: firstTrain,
     frequency: frequency,
     currentTime: currentTime,
-    //min: minUntilTrain,
-    //next: nextTrain
+    nextArrival: nextTrain,
+    minAway: minUntilTrain,
+    
     });
 
 });
@@ -106,13 +102,15 @@ database.ref().on("child_added", function(snapshot){
   console.log(sv.destination);
   console.log(sv.firstTrain);
   console.log(sv.frequency);
+  console.log(sv.firstTrain);
+  console.log(sv.minAway);
  
   $("#train-table").append("<tr class='train-info-row'>" + 
   "<td class='train-info-name'>" + sv.trainName + "</td>" +
   "<td class='train-info-destination'>" + sv.destination + "</td>" + 
-  "<td class='train-info-frequency'>" + sv.frequency + "</td>" + 
-  "<td class='train-info-next'>" + nextArrival + "</td>" + 
-  "<td class='train-info-away'>" + minAway +"</td>" + "</tr>");
+  "<td class='train-info-frequency'>" + sv.frequency + " min" + "</td>" + 
+  "<td class='train-info-next'>" + sv.nextArrival + "</td>" + 
+  "<td class='train-info-away'>" + sv.minAway +"</td>" + "</tr>");
 
   
 }, function(errorObject) {
