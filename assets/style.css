@@ -1,6 +1,16 @@
 body {
     background-color: lightblue;
     padding: 20px;
+    font-weight: bold;
 }
-
-
+#strip {
+    display: flex;
+    flex-wrap: wrap;
+}
+thead {
+    background-color: rgb(42, 134, 42);
+}
+input {
+    border: lightgray 3px inset;
+    
+}

@@ -54,7 +54,7 @@ $("#add-Train").on('click', function(event) {
   }
 
   //Create a var to keep track of current time and control its format
-  var currentTime = moment().format("LT");
+  var currentTime = moment().format("HH:mm");
 
   //Create a var that does the math between 
   //Subtract the first train time back a year to make sure it's before current time.
@@ -66,9 +66,9 @@ $("#add-Train").on('click', function(event) {
 
   //Time math to get minuites until the next train
   var minUntilTrain = frequency - remainder; 
-  var nextTrain = moment().add(minUntilTrain, "minutes").format("LT");
+  var nextTrain = moment().add(minUntilTrain, "minutes").format("HH:mm");
 
-  
+  //Keep track of all vars to make sure they are being read correctly
   console.log(trainName);
   console.log(destination);
   console.log(firstTrain);
@@ -80,7 +80,7 @@ $("#add-Train").on('click', function(event) {
   console.log(nextTrain);
 
 
-
+//push info to firebase
   database.ref().push({
     trainName: trainName,
     destination: destination,
@@ -94,10 +94,30 @@ $("#add-Train").on('click', function(event) {
 
 });
 
+//Needed to make input in military time
+function checkTime() {
+  var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test($("#startTime").val());
+  if (isValid) {
+      $("#startTime").addClass("bg-success")
+      setTimeout(function () {
+          $("#startTime").removeClass("bg-success")
+      }, 2000);
+  } else {
+      $("#startTime").addClass("bg-danger");
+      setTimeout(function () {
+          $("#startTime").removeClass("bg-danger")
+      }, 750);
+  }
+  return isValid;
+};
+
 // Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
 database.ref().on("child_added", function(snapshot){
 
+  //Create var to shorthand snapshot value
   var sv = snapshot.val();
+
+  //Track that all informatin is being read correctly
   console.log(sv.trainName);
   console.log(sv.destination);
   console.log(sv.firstTrain);
@@ -112,7 +132,7 @@ database.ref().on("child_added", function(snapshot){
   "<td class='train-info-next'>" + sv.nextArrival + "</td>" + 
   "<td class='train-info-away'>" + sv.minAway +"</td>" + "</tr>");
 
-  
+  //Lets you know that error has occured and what it is if firebase call messes up
 }, function(errorObject) {
   console.log("Errors handled: " + errorObject.code);
 });
